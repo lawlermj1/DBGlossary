@@ -1,4 +1,4 @@
-# DBGlossary
+# Glossary
 
 
 # Creating a glossary by parsing words from DB column names 
