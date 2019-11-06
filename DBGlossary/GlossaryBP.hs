@@ -6,7 +6,7 @@
    License     : 2-Clause BSD
    Maintainer  : lawlermj1@gmail.com
 
-   This module defines glossary functions used to discover and verify parsed phrases extracted from a names list. This could be all columns in a DB Schema. 
+   This module defines glossary functions used to discover and verify parsed phrases extracted from a names list. This could be all columns in a DB Schema.  
 
  -}
 module DBGlossary.GlossaryBP

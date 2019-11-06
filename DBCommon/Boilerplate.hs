@@ -46,8 +46,8 @@
         
     Other possible properties include: 
         gload.gunload = id 
-		
-	Note: The full gunfold is not used. Specifically, recursive data types are not handled. 
+
+     Note: The full gunfold is not used. Specifically, recursive data types are not handled. 
         
  -}
 module DBCommon.Boilerplate
@@ -142,10 +142,13 @@ module DBCommon.Boilerplate
 import Data.Char 
 import Data.Generics 
 import Data.List  
-import Data.List.Split  
 import qualified Data.Map.Strict as M  
 import Data.Maybe  
 import Data.Time 
+
+--  import Data.List.Split  
+import Control.Applicative 
+import Control.Applicative.Combinators as C 
 
 --    import Oleg.GMap 
 --    import Oleg.TypeReflFull 
@@ -1257,8 +1260,8 @@ gcheckEnumTypeU a s
     | otherwise = ( flip elem ) ( gelemsU a ) s 
     
 --    check if this is an Enum type 
---     Ambiguous type variable â€˜a0â€™ arising from a use of â€˜gelemsUâ€™
---      prevents the constraint â€˜( Data a0 )â€™ from being solved.
+--     Ambiguous type variable ‘a0’ arising from a use of ‘gelemsU’
+--      prevents the constraint ‘( Data a0 )’ from being solved.
 --isEnumType :: String -> Bool 
 --isEnumType s 
 --    | ( gelemsU ( undefined::s ) ) == [] = False 
@@ -1713,7 +1716,8 @@ gString2Day  s
     | otherwise = brackets (  show ( ( toModifiedJulianDay.fromJust ) md )  )
     where 
         trimS = trim s 
-        dateParts = splitOneOf "-/" trimS 
+--        dateParts = splitOneOf "-/" trimS 
+        dateParts = C.sepBy "-/" trimS 
 --    this a safe head and last. 
         day = read (  head dateParts  ) :: Int 
         monthName = head ( tail dateParts ) 
@@ -1765,7 +1769,8 @@ string2DayEither s
     | otherwise = Right ( fromGregorian ( read year :: Integer ) ( s2i month ) ( s2i day ) )  
     where 
         trimS = trim s 
-        dateParts = splitOneOf "-/" trimS 
+--        dateParts = splitOneOf "-/" trimS 
+        dateParts = C.sepBy "-/" trimS 
         day = head dateParts 
         month = head ( tail dateParts ) 
         year = last dateParts 
@@ -2552,7 +2557,8 @@ gcheckDay  s
     | otherwise = True 
     where 
         trimS = trim s 
-        dateParts = splitOneOf "-/" trimS 
+--        dateParts = splitOneOf "-/" trimS 
+        dateParts = C.sepBy "-/" trimS 
 --    these are safe heads. see above. 
         day = head dateParts
         month = head ( tail dateParts ) 
