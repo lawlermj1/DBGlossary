@@ -11,7 +11,7 @@
    It also performs some property testing on the generated boilerplate functions. 
 
  -}
-
+module Main where 
 -- Prelude modules  
 import Data.Generics    
 import Data.List   

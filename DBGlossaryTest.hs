@@ -11,7 +11,7 @@
    It also reads a simple csv, checks the strings, loads into types and outputs the result. 
 
  -}
- 
+ module Main where 
 -- Prelude modules  
 import Data.List 
 

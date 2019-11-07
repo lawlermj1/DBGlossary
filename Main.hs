@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveDataTypeable #-} 
 {- |
-   File        : Glossary 
+   File        : Main 
    Description : Parses phrases from a names set, using discovered snippets 
    Copyright   : ( c ) Matthew Lawler 2018 
    License     : 2-Clause BSD
@@ -22,7 +22,7 @@
    Various intermediate outputs can also be produced until the snippets and phrases are fully trained in all the underlying words used in the full name set. 
 
  -}
-
+module Main where 
 -- Prelude modules 
 import Data.List 
 
@@ -40,10 +40,10 @@ import DBGlossary.GlossaryBP
 testTheData = True    
 
 --------------------------------------------------------------
-
+main :: IO ()
 main = do
 --    some parms 
-    putStrLn $ " Glossary " 
+    putStrLn $ " Main" 
 
 -------------------------  
 --    INPUTS 
