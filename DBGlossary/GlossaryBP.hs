@@ -96,11 +96,11 @@ module DBGlossary.GlossaryBP
 import Data.Char 
 import Data.Data  
 import Data.Either 
-import Data.List ( sortBy,nub,intercalate,isInfixOf,sort,( \\ ) ) 
+import Data.List ( sortBy,nub,intercalate,isInfixOf,sort ) 
 import Data.Maybe 
 import qualified Data.Map.Strict as M  
 import Data.Ord  
-import Data.Typeable 
+-- import Data.Typeable 
 
 import qualified Text.ParserCombinators.Parsec as P 
 
@@ -120,9 +120,9 @@ data Domain = Domain { domainType :: DomainType
                     , domainName :: String
                     } deriving (  Eq, Ord, Typeable, Data  ) 
                     
-data Namespace = Namespace { namespaceType :: String 
-                    , namespaceName :: String 
-                    } deriving (  Eq, Ord, Typeable, Data  ) 
+-- data Namespace = Namespace { namespaceType :: String 
+--                    , namespaceName :: String 
+--                    } deriving (  Eq, Ord, Typeable, Data  ) 
 
 data Snippet2PhraseIn = Snippet2PhraseIn { snippet2PhraseInPhrase :: String 
                     , snippet2PhraseInSnippet :: String
@@ -264,28 +264,48 @@ data ColumnName = ColumnName {
 
 --------------------------------------------------------------------------------
 --    Boilerplate DEFAULTS Public
+authorityDefault :: Authority
 authorityDefault = gdefaultU ( undefined::Authority ) 
+domainDefault :: Domain
 domainDefault = gdefaultU ( undefined::Domain ) 
+snippet2PhraseInDefault :: Snippet2PhraseIn
 snippet2PhraseInDefault = gdefaultU ( undefined::Snippet2PhraseIn ) 
+phraseInDefault :: PhraseIn
 phraseInDefault = gdefaultU ( undefined::PhraseIn ) 
-name2SnippetDefault = gdefaultU ( undefined::Name2Snippet ) 
+name2SnippetDefault :: Name2Snippet
+name2SnippetDefault = gdefaultU ( undefined::Name2Snippet )
+snippet2NameDefault :: Snippet2Name 
 snippet2NameDefault = gdefaultU ( undefined::Snippet2Name ) 
+phraseDefault :: Phrase
 phraseDefault = gdefaultU ( undefined::Phrase ) 
+phrase2SnippetDefault :: Phrase2Snippet
 phrase2SnippetDefault = gdefaultU ( undefined::Phrase2Snippet ) 
+name2PhraseDefault :: Name2Phrase
 name2PhraseDefault = gdefaultU ( undefined::Name2Phrase ) 
+snippet2PhraseDefault :: Snippet2Phrase
 snippet2PhraseDefault = gdefaultU ( undefined::Snippet2Phrase ) 
+phrase2NameDefault :: Phrase2Name
 phrase2NameDefault = gdefaultU ( undefined::Phrase2Name ) 
+name2PhraseMinDefault :: Name2PhraseMin
 name2PhraseMinDefault = gdefaultU ( undefined::Name2PhraseMin ) 
+name2PhraseOutDefault :: Name2PhraseOut
 name2PhraseOutDefault = gdefaultU ( undefined::Name2PhraseOut ) 
+phrase2NameOutDefault :: Phrase2NameOut
 phrase2NameOutDefault = gdefaultU ( undefined::Phrase2NameOut ) 
+columnNameDefault :: ColumnName
 columnNameDefault = gdefaultU ( undefined::ColumnName ) 
 
 --------------------------------------------------------------------------------
---    Boilerplate LOADS  
+--    Boilerplate LOADS 
+authorityLoad :: [String] -> Authority 
 authorityLoad = gloadU ( undefined::Authority ) 
+domainLoad :: [String] -> Domain
 domainLoad = gloadU ( undefined::Domain ) 
+snippet2PhraseInLoad :: [String] -> Snippet2PhraseIn
 snippet2PhraseInLoad = gloadU ( undefined::Snippet2PhraseIn ) 
+phraseInLoad :: [String] -> PhraseIn
 phraseInLoad = gloadU ( undefined::PhraseIn ) 
+columnNameLoad :: [String] -> ColumnName
 columnNameLoad = gloadU ( undefined::ColumnName ) 
 
 --------------------------------------------------------------------------------
@@ -357,29 +377,29 @@ name2PhraseMap name2PhraseList
 --    f p10 
 --    initialise Phrase from PhraseIn   
 phraseIn2Phrase :: PhraseIn -> Phrase 
-phraseIn2Phrase pi 
+phraseIn2Phrase phrasein 
     = phraseDefault {
           phrasePhrase = lp 
-        , phrasePhraseType = phraseInPhraseType pi 
-        , phraseExpansion = phraseInExpansion pi 
-        , phraseAuthority = phraseInAuthority pi
-        , phraseDefinition = phraseInDefinition pi 
-        , phraseDomain = phraseInDomain pi 
+        , phrasePhraseType = phraseInPhraseType phrasein 
+        , phraseExpansion = phraseInExpansion phrasein 
+        , phraseAuthority = phraseInAuthority phrasein
+        , phraseDefinition = phraseInDefinition phrasein 
+        , phraseDomain = phraseInDomain phrasein 
         , phraseIsAllUpper = all isUpper lp 
         , phraseIsTitle = if lp /= [] then isUpper ( head lp ) && all isLower ( tail lp ) else False 
         , phraseHasUpperInTail = if lp /= [] then any isUpper ( tail lp ) else False 
         , phraseHasNonAlphaNum = not ( all isAlphaNum lp )
         , phraseHasSpaces = isInfixOf " " lp 
         , phraseLength = length lp 
-        , phraseSubType = phraseInSubType pi 
-        , phraseIgnore = phraseInIgnore pi 
-        , phraseDiscard = phraseInDiscard pi 
-        , phraseMultiBaseWord = phraseInMultiBaseWord pi 
-        , phraseMultiWordType = phraseInMultiWordType pi         
+        , phraseSubType = phraseInSubType phrasein 
+        , phraseIgnore = phraseInIgnore phrasein 
+        , phraseDiscard = phraseInDiscard phrasein 
+        , phraseMultiBaseWord = phraseInMultiBaseWord phrasein 
+        , phraseMultiWordType = phraseInMultiWordType phrasein         
 --    currently limited to 2 word phrases only 
-        , phraseCorrectWords = [phraseInMBW1 pi, phraseInMBW2 pi] 
+        , phraseCorrectWords = [phraseInMBW1 phrasein, phraseInMBW2 phrasein] 
         } 
-    where lp = phraseInPhrase pi 
+    where lp = phraseInPhrase phrasein 
 
 --    f p11 
 --    filter for S2P based on phraseIgnore field 
@@ -395,12 +415,12 @@ filterS2PIn phraseMapLU s2pi
 --    takes 12 mins to print out 12,000 values from 7,000 s2pin 
 --    can't decompose, as the sort is critical 
 getSnippet2Phrase :: M.Map String Phrase -> [Snippet2PhraseIn] -> [Snippet2Phrase] 
-getSnippet2Phrase s2pLU snippet2PhraseInLoad 
+getSnippet2Phrase s2pLU s2pil 
 --    sort in reverse length, so Parsec always checks longer phrase first, before shorter ones  
     = reverse ( sortBy ( comparing ( \v -> length ( snippet2PhraseSnippet v ) ) ) snippet2PhraseLoad2 ) 
         where 
 --    initialise snippet2Phrase
-            snippet2PhraseLoad1 = fmap ( snippet2PhraseIn2Snippet2Phrase s2pLU ) snippet2PhraseInLoad  
+            snippet2PhraseLoad1 = fmap ( snippet2PhraseIn2Snippet2Phrase s2pLU ) s2pil  
 --    add an underscore prefix to each phrase 
             snippet2PhraseLoad2 = snippet2PhraseLoad1 ++ ( map appendUnderscoreSnippet2Phrase snippet2PhraseLoad1 ) ++ ( map appendSpaceSnippet2Phrase snippet2PhraseLoad1 ) 
 
@@ -704,10 +724,10 @@ concatDigits x y
 --    f h10
 --    initialises phrase from S2P for testing purposes 
 --    not used 
-snippet2Phrase2PhraseIn :: Snippet2Phrase -> PhraseIn  
-snippet2Phrase2PhraseIn s2p 
-    = phraseInDefault { 
-      phraseInPhrase = snippet2PhrasePhraseName s2p 
-    , phraseInExpansion = if elem wt [Acronym,Contraction] then snippet2PhraseSnippet s2p  else "" 
-    , phraseInPhraseType = wt } 
-    where wt = snippet2PhrasePhraseType s2p 
+-- snippet2Phrase2PhraseIn :: Snippet2Phrase -> PhraseIn  
+-- snippet2Phrase2PhraseIn s2p 
+--    = phraseInDefault { 
+--      phraseInPhrase = snippet2PhrasePhraseName s2p 
+--    , phraseInExpansion = if elem wt [Acronym,Contraction] then snippet2PhraseSnippet s2p  else "" 
+--    , phraseInPhraseType = wt } 
+--    where wt = snippet2PhrasePhraseType s2p 

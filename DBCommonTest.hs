@@ -26,8 +26,10 @@ import DBCommon.Usage
 
 ------------------------------------
 --    current input default 
-testTheData = True    
-
+testTheData :: Bool 
+testTheData = True  
+  
+main :: IO () 
 main = do
 --    some parms 
     putStrLn $ " DBCommonTest " 

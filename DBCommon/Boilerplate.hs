@@ -147,7 +147,7 @@ import Data.Maybe
 import Data.Time 
 
 --  import Data.List.Split  
-import Control.Applicative 
+-- import Control.Applicative 
 import Control.Applicative.Combinators as C 
 
 --    import Oleg.GMap 
@@ -200,13 +200,13 @@ type IgnoreTypes = [TypeRep]
 
 --    called by describe_type'  
 describe_ctor :: Data a => IgnoreTypes -> SeenTypes -> Constr -> CCList a
-describe_ctor ignore seen = gunfold branch empty
+describe_ctor ignore seen = gunfold branch emptyR
  where
  branch :: forall r b. Data b => CCList ( b -> r ) -> CCList r
  branch ( CCList n ) = let CTTree n1 = describe_type' ignore seen :: CTTree b
                      in CCList ( n1:n )
- empty  :: r -> CCList r
- empty _ = CCList []             -- Leaf of the type tree
+ emptyR  :: r -> CCList r
+ emptyR _ = CCList []             -- Leaf of the type tree
 
 --    called by describe_type 
 describe_type' :: forall a. Data a => IgnoreTypes -> SeenTypes -> CTTree a
@@ -266,8 +266,8 @@ isTRepMonad t
     where st = trim(  show t  ) 
     
 --    not sure how to do this 
-isTRepEnumType :: TRep -> Bool  
-isTRepEnumType t = undefined 
+-- isTRepEnumType :: TRep -> Bool  
+-- isTRepEnumType t = undefined 
     
 --    checks if this TRep is a product or sum Constructor  
 --    assume that if it is not Base, Monad, it must be Product/Sum   
@@ -363,8 +363,8 @@ gmapt f trep = maybe ( \x -> traverse ( trep,x ) ) ifmarked $ castfn f
   -- The gmapped value x has the right type to be transformed by 'f'
   -- We do the transformation only if 'x' has the mark
   -- ifmarked :: Typeable x => ( x->y ) -> ( x->y )
-  ifmarked f x | hasmark trep = f x
-  ifmarked f x = traverse ( trep,x )
+  ifmarked g x | hasmark trep = g x
+  ifmarked _ x = traverse ( trep,x )
   
   -- optimization: t has no mark, there is nothing to map under it
   traverse ( Dyn t,x ) | typeOf t == typeOf x = 
@@ -390,7 +390,8 @@ serialize :: Data a => a -> Serialized
 serialize x = ( toConstr x, growUp $ gfoldl k ( const ( Kids [] ) ) x )
   where k ( Kids l ) a = Kids ( l ++ [Dyn a] )
 
-tdyn1 = serialize "abcd"
+-- tdyn1 :: Serialized 
+-- tdyn1 = serialize "abcd"
 
 -- The deserialization step ( which traverses the template in parallel )
 -- It reassembles the value from the possibly transformed subcomponents
@@ -404,7 +405,8 @@ rebuild f ( tcon, tkids ) ( con, kids ) =
   where k ( UnfldStateT ca ( tkid:tkids ) ( ( Dyn kid ):kids ) ) = 
             UnfldStateT ( ca ( gmapt f tkid kid ) ) tkids kids
 
-toChar i = chr ( i + ord 'A' )
+-- toChar :: Int -> Char
+-- toChar i = chr ( i + ord 'A' )
 
 -------------------------------------
 --    types for kindy things 
@@ -426,9 +428,12 @@ data DT = DT {
 --    what level in this field inside a Monad?   
     , dTMonadLevel :: Int      
     } deriving (  Typeable, Show, Ord, Read, Eq ) 
-    
+  
+dTDefault :: DT  
 dTDefault = DT " " BaseDT [] 0 0 Nothing False 0 
+dTCloseBracket :: DT
 dTCloseBracket = dTDefault { dTName = "  ) ", dTType = CloseBracketDT }  
+dTCloseListBracket :: DT
 dTCloseListBracket = dTDefault { dTName = " ( [] ) ) ", dTType = CloseListBracketDT }  
 
 --    alternate equality function used in properties 
@@ -649,8 +654,9 @@ updateDTTreeRoot f ( DTNode t sf )
     
 --------------------------------
 --     DTTree + DT 
-
+dTTreeCloseBracket :: DTTree DT
 dTTreeCloseBracket = DTNode ( Just dTCloseBracket ) [] 
+dTTreeCloseListBracket :: DTTree DT
 dTTreeCloseListBracket = DTNode ( Just dTCloseListBracket ) [] 
     
 --    append a close bracket as last element of the sub-forest sf 
@@ -815,7 +821,8 @@ data NamedA b c = NamedA {
 --    string list for enum type checking 
     , namedAConfields :: [String] 
     } deriving (  Typeable  )  
-    
+
+namedADefault :: NamedA b c    
 namedADefault = NamedA "" undefined undefined dTDefault 0 0 "" False 0 [] 
 
 --    ignore namedAFunction, namedAAccessorName and namedAConfields for equality     
@@ -855,7 +862,7 @@ gIsFieldOrDate n
     
 --    embedded into a Tree 
 gIsDayNode :: DTTree ( NamedA b c ) -> Bool 
-gIsDayNode ( DTNode t sf ) 
+gIsDayNode ( DTNode t _ ) 
 --    make it safe 
     | isNothing t = False 
 --    check the constructor name 
@@ -863,7 +870,7 @@ gIsDayNode ( DTNode t sf )
     
 --    embedded into a Tree 
 gIsListNode :: DTTree ( NamedA b c ) -> Bool 
-gIsListNode ( DTNode t sf ) 
+gIsListNode ( DTNode t _ ) 
 --    make it safe 
     | isNothing t = False 
 --    check the constructor name 
@@ -871,7 +878,7 @@ gIsListNode ( DTNode t sf )
     
 --    embedded into a Tree 
 gIsMaybeNode :: DTTree ( NamedA b c ) -> Bool 
-gIsMaybeNode ( DTNode t sf ) 
+gIsMaybeNode ( DTNode t _ ) 
 --    make it safe 
     | isNothing t = False 
 --    check the constructor name 
@@ -896,8 +903,8 @@ gAlways _ = True
 -------------------------------------
 --    helper functions 
 --    ADT 
-undefinedType :: Data a => String -> a 
-undefinedType s = ( undefined::s ) 
+-- undefinedType :: Data a => String -> a 
+-- undefinedType s = ( undefined::s ) 
     
 -------------------------------------------
 --    Strings 
@@ -1186,7 +1193,7 @@ data EnumLU = EnumLU {
 makeEnumLU :: Data a => a -> EnumLU 
 makeEnumLU a 
 --    = EnumLU ( gname a ) ( gelemsU a )  
-    = EnumLU ( gname a ) ( gelemsD a )      
+    = EnumLU ( gname a ) ( gelemsD a ) 
     
 --    convert to KV format     
 enumLU2KV :: EnumLU -> ( String, [String] ) 
@@ -1354,6 +1361,7 @@ gd f a
     
 --    simple default 
 --    id function will force b to be Int as well   
+namedAString :: NamedA String String
 namedAString = namedADefault { namedAValue = bracketsOpen " ", namedAFunction = showString " ( " } 
 
 --    allocate a the type name and value for each type    
@@ -1403,10 +1411,15 @@ fixDefaults d1 d2
     | otherwise = d2 
         
 --    shared defaults for gfold and gunfold versions  
+defaultChar :: [Char]
 defaultChar = " " 
+defaultString :: [Char]
 defaultString = " "
+defaultInt :: [Char]
 defaultInt = "( 0 )" 
+defaultFloat :: [Char]
 defaultFloat = "( 0.0 )" 
+defaultBool :: [Char]
 defaultBool = "( False )" 
 
 -------------------
@@ -1527,6 +1540,7 @@ gcFieldInt n
 
 --    count default 
 --    id function will force b to be Int as well 
+namedACount :: NamedA Int Int
 namedACount = namedADefault { namedAValue = 1, namedAFunction = id } 
 
 --    allocate the type name and value for each type 
@@ -1656,6 +1670,7 @@ gldD :: Data a => a -> [NamedA String String]
 gldD  a = gld  gADTD2ListD a 
 
 --    simple default 
+namedALoad :: NamedA [Char] String
 namedALoad = namedADefault { namedAValue = "brackets", namedAFunction = brackets } 
 
 --    TRep defaults   
@@ -1710,7 +1725,7 @@ gString2Day  s
 --    some checks; what is error date? using 1970 1 1 as error date 
     | length dateParts /= 3 = brackets " ( 40587 )" 
 --    check day range 
-    | not ( elem ( head dateParts ) ( map show [1..31] ) ) = brackets " ( 40587 )" 
+    | not ( elem ( head dateParts ) validMonthDays ) = brackets " ( 40587 )" 
 --    check month and year ranges  
 --    otherwise, show the interpreted date 
     | otherwise = brackets (  show ( ( toModifiedJulianDay.fromJust ) md )  )
@@ -1727,8 +1742,10 @@ gString2Day  s
         md = fromGregorianValid year month day 
         
 --    uses out date format to convert ModifiedJulianDay to a Gregorian Date 
-gString2GregDay :: String -> String 
-gString2GregDay  s = undefined 
+-- gString2GregDay :: String -> String 
+-- gString2GregDay  s = undefined 
+validMonthDays :: [String] 
+validMonthDays = map show ([1..31]::[Int]) 
 
 --    map months to numbers 
 month2Map :: M.Map String Int 
@@ -1762,7 +1779,7 @@ gString2String s = brackets ( " ( \"" ++ trim s ++ "\" ) " )
 string2DayEither :: String -> Either String Day  
 string2DayEither s 
     | length dateParts /= 3 = Left ( "Error! string2DayEither? not enough date parts: " ++ trimS ) 
-    | notElem day ( map show [1..31] ) = Left ( "Error! string2DayEither? day is not valid: " ++ trimS ) 
+    | notElem day validMonthDays = Left ( "Error! string2DayEither? day is not valid: " ++ trimS ) 
     | notElem month ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"] = Left ( "Error! string2DayEither? month is not valid: " ++ trimS ) 
     | not ( all isDigit year ) = Left ( "Error! string2DayEither? year is not valid: " ++ trimS )     
 --    | otherwise = Right ( parseTimeOrError True defaultTimeLocale "%-d-%b-%y" trimS ) 
@@ -1774,7 +1791,7 @@ string2DayEither s
         day = head dateParts 
         month = head ( tail dateParts ) 
         year = last dateParts 
-        s2i s = read s :: Int 
+        s2i x = (read x):: Int 
         
 --    f p17        
 --    if the date is valid, then show it, otherwise use epochUTCTime 
@@ -1874,6 +1891,7 @@ ghD a = gh gADTD2ListD a
     
 --    simple default 
 --    id function will force the b type as well 
+namedAHeader :: NamedA (Maybe a) (Maybe a)
 namedAHeader = namedADefault { namedAValue = Nothing, namedAFunction = id } 
 
 --    allocate a the type name and value for each type 
@@ -2040,6 +2058,7 @@ guldValue f a
 --    -> "( SchemaTest ( False ) ( Just ( 0 ) ) ( (:) \" \" ( [] ) ) ( (:) ( I2NDIn \" \" ( 0 ) ( ' ' ) ) ( [] ) ) )"
     
 --    unload default 
+namedAUnloadValue :: NamedA [Char] String
 namedAUnloadValue = namedADefault { namedAValue = "gulShow", namedAFunction = gulShow } 
 
 --    initial allocation of unload functions based on base type 
@@ -2123,6 +2142,7 @@ guldTreeD a
     = flattenDFS ( guldTree gADTD2Tree a ) 
     
 --    unload default 
+namedAUnload :: NamedA [Char] String
 namedAUnload = namedADefault { namedAValue = "gulShow", namedAFunction = gulShow } 
 
 --    initial allocation of unload functions based on base type 
@@ -2413,6 +2433,7 @@ gckD :: Data a => a -> [NamedA String Bool]
 gckD  a = gck gADTD2ListD a 
     
 --    check default 
+namedACheck :: NamedA [Char] Bool 
 namedACheck = namedADefault { namedAValue = "gcheckTrue", namedAFunction = gcheckTrue } 
 
 --    TRep defaults   
@@ -2472,18 +2493,19 @@ gcheckEnumType confields s
 --    a is the name of the type  
 --    lookup :: Eq a => a -> [( a, b )] -> Maybe b 
 --    fromMaybe :: a -> Maybe a -> a
-gcheckEnumType2 :: String -> String -> Bool 
-gcheckEnumType2 a s  
+-- gcheckEnumType2 :: String -> String -> Bool 
+-- gcheckEnumType2 a s  
 --    | trace ( "gcheckEnumType2: luList = " ++ intercalate "," luList ++ " : a = " ++ a ++ " : s = " ++ s ) False = undefined 
 --    | luList == [] = False 
-    | length luList == 0 = False 
-    | elem s luList = True 
-    | otherwise = False 
+--    | length luList == 0 = False 
+--    | elem s luList = True 
+--    | otherwise = False 
 --    where luList = fromMaybe [] ( lookup a allEnumLU ) 
-    where luList = [] 
+--    where luList = [] 
     
 --    as new Enums are added to EnumType, add a new entry here ... 
 --      SourceType    FileType 
+enumListCommon :: [EnumLU] 
 enumListCommon = [ makeEnumLU ( undefined::FileType ), makeEnumLU ( undefined::SourceType ) ] 
 
 --    this is referred to directly in Enum validation. 
@@ -2541,7 +2563,6 @@ gcheckSourceType2 _ =  [( "SourceType", ( gcheckEnumTypeU ( undefined::SourceTyp
 -------------------------
 --    applies each string to respective function, applies them, and then folds the result 
 
-
 --    checks if string is in "%-d-%b-%y" format 
 --    eg 20-Sep-2015  
 --    add fromGregorianValid :: Integer -> Int -> Int -> Maybe Day 
@@ -2550,7 +2571,7 @@ gcheckDay :: String -> Bool
 gcheckDay  s 
 --    | trace ( "gcheckDay: s = " ++ s ++ " : year = " ++ year ++ " : month = " ++ month ++ " : day = " ++ day  ) False = undefined 
     | length dateParts /= 3 = False 
-    | notElem day ( map show [1..31] ) = False
+    | notElem day validMonthDays = False 
 --    test for upper case as well? 
     | notElem month ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"] = False 
     | not ( all isDigit year ) = False  
@@ -2625,7 +2646,7 @@ gcheckFloat s
 --    this is a safe head. 
         headChar = head trimS 
         isMinus = ( == '-' ) 
-        isPlus = ( == '+' ) 
+--        isPlus = ( == '+' ) 
         isDecPt = ( == '.' ) 
         hasExp = elem 'e' ( map toLower trimS ) 
 --    allow signs, digits, plus e for exponent 
@@ -2692,12 +2713,12 @@ greadF a s
     where g = gread s 
     
 --    readEither :: Read a => String -> Either String a 
-greadEither :: Data a => a -> String -> Either String a  
-greadEither a s 
-    | length g == 0 = Left "Error!: greadEither? returns nothing" 
+-- greadEither :: Data a => a -> String -> Either String a  
+-- greadEither a s 
+--    | length g == 0 = Left "Error!: greadEither? returns nothing" 
 --    this is a safe head. 
-    | otherwise = Right ( ( fst.head ) g ) 
-    where g = gread s     
+--    | otherwise = Right ( ( fst.head ) g ) 
+--    where g = gread s     
         
 --    add in brackets for parsing 
 --    converts a string into the Enum Type 
@@ -2712,12 +2733,12 @@ gstring2EnumType a s
     where trimS = trim s 
 
 --    readMaybe :: Read a => String -> Maybe a 
-greadMaybe :: Data a => a -> String -> Maybe a  
-greadMaybe a s 
-    | length g == 0 = Nothing 
+-- greadMaybe :: Data a => a -> String -> Maybe a  
+-- greadMaybe a s 
+--    | length g == 0 = Nothing 
 --    this is a safe head. 
-    | otherwise = Just ( ( fst.head ) g ) 
-    where g = gread s 
+--    | otherwise = Just ( ( fst.head ) g ) 
+--    where g = gread s 
   
 -------------------------------------
 --    properties 
@@ -2823,10 +2844,9 @@ prop_gdD_eq_gdU a = and ( map tupleEq ( zip ( gdD ( gdefaultU a ) ) ( gdU a ) ) 
 
 --    checks that defaults are the same  
 --    does not really make sense, as gdefaultU is needed for both sides. 
-prop_gdefaultU_eq_gdefaultQ :: ( Show a, Data a, Eq a ) => a -> Bool 
+-- prop_gdefaultU_eq_gdefaultQ :: ( Show a, Data a, Eq a ) => a -> Bool 
 --    assumes a is undefined 
-prop_gdefaultU_eq_gdefaultQ a 
-    = undefined 
+-- prop_gdefaultU_eq_gdefaultQ a = undefined 
 --    = gdefaultU a == gdefaultQ ( gdefaultU a )  
 
 --    this will only work if the gdQ has manually added test for each Enum type 

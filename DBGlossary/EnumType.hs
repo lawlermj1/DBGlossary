@@ -21,7 +21,7 @@ module DBGlossary.EnumType
      ) where
     
 import Data.Data     
-import Data.Typeable 
+-- import Data.Typeable 
 
 --    AllPhrase is the superior or top type T PhraseType 
 --    Acronym is any word formed from the initial letters of a group of words e.g. WIP for Work In Progress

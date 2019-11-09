@@ -23,10 +23,10 @@ module DBCommon.Usage
 --------------------------------------------------------------------------------
 
 import Data.Data   
-import Data.Typeable 
+-- import Data.Typeable 
 
 import DBCommon.Boilerplate  
-import DBCommon.PreludeGapFiller  
+-- import DBCommon.PreludeGapFiller  
 import DBCommon.EnumType 
 
 --------------------------------------------------------------------------------
@@ -42,10 +42,12 @@ data DBCommonFile = DBCommonFile { dBCommonFileType :: FileType
 
 --------------------------------------------------------------------------------
 --    Boilerplate DEFAULTS 
+dBCommonFileDefault :: DBCommonFile
 dBCommonFileDefault = gdefaultU ( undefined::DBCommonFile ) 
 
 --------------------------------------------------------------------------------
 --    Boilerplate LOADS  
+dBCommonFileLoad :: [String] -> DBCommonFile
 dBCommonFileLoad = gloadU ( undefined::DBCommonFile ) 
 
 --------------------------------------------------------------------------------

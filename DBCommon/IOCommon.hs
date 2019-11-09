@@ -39,17 +39,20 @@ module DBCommon.IOCommon
 
 import Control.Exception 
 
-import Data.Char
+-- import Data.Char
 import Data.Data  
 import Data.Either 
 import Data.List ( intercalate )
-import Data.Typeable 
+-- import Data.Typeable 
 
 import System.Directory
 import System.IO 
 
 import qualified Text.ParserCombinators.Parsec as P 
 import Text.Parsec.Error 
+import Text.Parsec.Prim 
+
+import Data.Functor.Identity
 
 import DBCommon.PreludeGapFiller   
 import DBCommon.Boilerplate 
@@ -89,9 +92,13 @@ data ToPrint = ToPrint {
                     
 --------------------------------------------------------------------------------
 --    Boilerplate code 
+
+parmInputDefault :: ParmInput
 parmInputDefault = gdefaultU ( undefined::ParmInput ) 
+toPrintDefault :: ToPrint
 toPrintDefault = gdefaultU ( undefined::ToPrint ) 
 
+readResultDefault :: p -> ReadResult a 
 readResultDefault _ = ReadResult "" [] [] [] [] 
 
 --------------------------------------------------------------------------------    
@@ -107,6 +114,7 @@ instance Show a => Show ( ReadResult a ) where
 --------------------------------
 --    parameters  ActiveSubjectAreaOnlyIn 
 --parmInputTSVFile = parmInputDefault { inputInFilter = NoInFilter, inputIsAllType = ["Domain","Authority","ColumnBP","Snippet2PhraseIn","PhraseIn"], inputDoNotLoadTypes = ["ProfileCV100","ProfileIV100"] } 
+parmInputTSVFile :: ParmInput
 parmInputTSVFile = parmInputDefault { inputIsAllType = ["Domain","Authority","ColumnBP","Snippet2PhraseIn","PhraseIn"], inputDoNotLoadTypes = ["ProfileCV100","ProfileIV100"] } 
 
 -----------------------------------------------------------------------
@@ -249,18 +257,24 @@ parseWrap showType inData =
 
 --    H04 
 --    what is a quoted cell? 
+quotedCell :: Text.Parsec.Prim.ParsecT
+                      [Char] u Data.Functor.Identity.Identity [Char]
 quotedCell = do
-    P.char '"'
+    _ <- P.char '"'
     content <- P.many quotedChar
-    P.char '"' P.<?> "quote at end of cell"
+    _ <- P.char '"' P.<?> "quote at end of cell" 
     return content
     
 --    H05 
 --    define quotes 
+quotedChar :: Text.Parsec.Prim.ParsecT
+                      [Char] u Data.Functor.Identity.Identity Char 
 quotedChar = P.noneOf "\"" P.<|> P.try ( P.string "\"\"" >> return '"' )
 
 --    H06 
 --    eol parsec 
+eol :: Text.Parsec.Prim.ParsecT
+               [Char] u Data.Functor.Identity.Identity String 
 eol = P.try ( P.string "\n\r" ) P.<|> P.try ( P.string "\r\n" ) P.<|> P.string "\n" P.<|> P.string "\r" P.<?> "end of line"
 -- Testing 
 -- parseCSV :: String -> Either P.ParseError [[String]] 
@@ -272,6 +286,11 @@ eol = P.try ( P.string "\n\r" ) P.<|> P.try ( P.string "\r\n" ) P.<|> P.string "
 -- Useful for extracting each individual word. 
 -- Retain these as valid logical names "#$<>+&%"
 --parseLog :: String -> String -> [[String]] 
+parseLog :: (Text.Parsec.Prim.Stream
+                     s Data.Functor.Identity.Identity t1,
+                   Text.Parsec.Prim.Stream s Data.Functor.Identity.Identity Char,
+                   Text.Parsec.Prim.Stream s Data.Functor.Identity.Identity t2) =>
+                  P.SourceName -> [Char] -> s -> [[[Char]]] 
 parseLog showType nameFormatSeparatorLogicalIn inData = 
     tailSafe ( concat ( rights [P.parse logEnd showType inData] ) ) 
         where

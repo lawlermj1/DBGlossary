@@ -13,18 +13,19 @@
  -}
  module Main where 
 -- Prelude modules  
-import Data.List 
+-- import Data.List 
 
 -- Custom built modules 
 import DBCommon.Boilerplate 
-import DBCommon.PreludeGapFiller 
+-- import DBCommon.PreludeGapFiller 
 import DBCommon.EnumType 
 import DBCommon.IOCommon 
 
-import DBGlossary.EnumType 
+-- import DBGlossary.EnumType 
 import DBGlossary.GlossaryBP 
 
 ------------------------------------- 
+main :: IO () 
 main = do
 -- 
     putStrLn $ " DBGlossaryTest " 

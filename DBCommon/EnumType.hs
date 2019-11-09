@@ -20,7 +20,7 @@ module DBCommon.EnumType
      ) where
     
 import Data.Data     
-import Data.Typeable 
+-- import Data.Typeable 
 
 --------------------------------------------------------------------------------
 --    File types  

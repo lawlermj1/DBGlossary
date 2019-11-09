@@ -97,9 +97,9 @@ mapSnd f ( x:y:zs ) = x : mapSnd f ( ( f x y ):zs )
 filterSnd :: ( ( a, a ) -> Bool ) -> [a] -> [a] 
 filterSnd _ [] = [] 
 filterSnd _ [x] = [x] 
-filterSnd pred ( x:y:zs ) 
-    | pred ( x,y ) = x : filterSnd pred ( y:zs ) 
-    | otherwise = x : filterSnd pred zs  
+filterSnd prdct ( x:y:zs ) 
+    | prdct ( x,y ) = x : filterSnd prdct ( y:zs ) 
+    | otherwise = x : filterSnd prdct zs  
     
 --    const :: a -> b -> a
 --    const x _ =  x 
