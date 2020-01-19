@@ -1,22 +1,27 @@
 domainInType,domainInName
-CS,Computer Science
-DW,Datawarehousing
-Engineering,Engineering
-Finance,Finance
-HR,Human Resources
-IT,Information Technology
+AllDomains ,AllDomains 
+Aviation,Aviation
+ComputerScience,Computer Science
+DataWarehouse,DataWarehouse
+Education,Education
+Engineering ,Engineering 
+Finance ,Finance 
+Geography ,Geography 
+Government,Government
+HumanResource,Human Resource
+InformationTechnology,Information Technology
 Legal,Legal
-LNI,Logical Network Inventory
 Marketing,Marketing
 Mathematics,Mathematics
-Model,Modelling Standards
-OU,Organisation Unit
-PNI,Physical Network Inventory
-Project,Project Management
+Military,Military
+Organisation ,Organisation 
+Project,Project
 Risk,Risk
+Sales,Sales
 Science,Science
+Standard,Standard
 StandardEnglish,Standard English
-Standards,Standards
 Telecommunication,Telecommunication
 Time,Time
 Unknown,Unknown
+ZDomain,ZDomain  

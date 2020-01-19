@@ -1,40 +1,76 @@
-XYZ	0	F 
-ABS	1	T
-ACCC	2	F
-ALII	3	T
-ANSI	4	F
-ASIC	5	T
-ATO	6	F
-BIPM	7	T
-BPMI	8	F
-BSI	9	T
-CJDate	10	F
-EC	11	T
-GAT	12	F
-HK	13	T
-IASB	14	F
-IBM	15	T
-IETF	16	F
-ISO	17	T
-ITLaw	18	F
-ITU	19	T
-Kimball	20	F
-LawDict	21	T
-MktgMgt	22	F
-MS	23	T
-NBN	24	F
-NESSI	25	T
-None	26	F
-NYSSCPA	27	T
-OASIS	28	F
-OGC	29	T
-OMG	30	F
-Oracle	31	T
-Primavera	32	F
-SCC	x	T
-SEI	34	x
-StdAust	35	F
-UML	36	F
-USGovt	37	T
-W3C	38	F
-Wiki	39	T
+AuthType,Name,URL,
+ABS,Australian Bureau of Statistics,https://www.abs.gov.au/,
+ACARA,"Australian Curriculum, Assessment and Reporting Authority",https://www.acara.edu.au/,
+ACCC,Australian Competition & Consumer Commission,https://www.accc.gov.au/,
+ACECQA,Australian Children's Education & Care Quality Authority,https://www.acecqa.gov.au/,
+ACM,Association for Computing Machinery,https://www.acm.org/,
+AEDC,Australian Early Development Census,https://www.aedc.gov.au/,
+AES,Australian Evaluation Society,https://www.aes.asn.au/,
+AG,Government of Australia,https://www.australia.gov.au/,
+AGD,Attorney-General's Department,https://www.ag.gov.au,
+ALII,Australasian Legal Information Institute,http://www.austlii.edu.au/,
+ANSI,American National Standards Institute,https://www.ansi.org/,
+ASGS,Australian Statistical Geography Standard,https://www.abs.gov.au/,
+ASIC,Australian Securities and Investments Commission,https://asic.gov.au/,
+ATO,Australian Taxation Office,https://www.ato.gov.au/,
+Austrade,Austrade,https://www.austrade.gov.au/,
+BIPM,International Bureau of Weights and Measures,https://www.bipm.org,
+BSI,British Standards Institution,https://www.bsigroup.com,
+CC,Child Care,https://www.education.gov.au/,
+CJDate,Christopher J. Date,https://en.wikipedia.org/wiki/Christopher_J._Date,
+COAG,Council of Australian Governments,https://www.coag.gov.au/,
+DA,Department of Agriculture,https://www.agriculture.gov.au/,
+DD,Department of Defence,https://www.defence.gov.au/,
+DE,Department of Education,https://www.education.gov.au/,
+DESSFB,"Department of Employment, Skills, Small and Family Business",https://www.employment.gov.au/,
+DF,Department of Finance,https://www.finance.gov.au/,
+DFAT,Department of Foreign Affairs and Trade,https://dfat.gov.au,
+DH,Department of Health,https://www.health.gov.au/,
+DHA,Department of Home Affairs,https://www.homeaffairs.gov.au/,
+DHS,Department of Human Services,https://www.humanservices.gov.au/,
+DIAC,Department of Immigration and Citizenship,https://www.homeaffairs.gov.au/,
+DIBP,Department of Immigration and Border Protection,https://www.homeaffairs.gov.au/,
+DIMA,Department of Immigration and Multicultural Affairs,https://www.homeaffairs.gov.au/,
+DPMC,Department of the Prime Minister and Cabinet,https://www.pmc.gov.au/,
+DSS,Department of Social Services,https://www.dss.gov.au,
+DT,Department of the Treasury,https://treasury.gov.au/,
+DVA,Department of Veterans' Affairs,https://www.dva.gov.au/,
+EC,European Commission,https://ec.europa.eu/,
+ESA,Education Services Australia,https://www.esa.edu.au/,
+FGUSA,Federal government of the United States,https://www.usa.gov/,
+FRL,Federal Register of Legislation,https://www.legislation.gov.au/,
+FS,Financial Standard,https://www.financialstandard.com.au/,
+GAT,Generally Accepted Term,https://en.wikipedia.org/wiki/Best_practice,
+GUK,Government of the United Kingdom,https://www.gov.uk/,
+HE,Higher Education,https://www.education.gov.au/,
+HEIMS,Higher Education Information Management System,https://www.education.gov.au/,
+IASB,International Accounting Standards Board,https://www.ifrs.org/,
+IBM,International Business Machines,https://www.ibm.com,
+IEA,International Association for the Evaluation of Educational Achievement,https://www.iea.nl/node/1580,
+IETF,Internet Engineering Task Force,https://www.ietf.org/,
+ISO,International Organization for Standardization,https://www.iso.org,
+ITECA,Independent Tertiary Education Council Australia,https://www.iteca.edu.au/,
+ITU,International Telecommunication Union,https://www.itu.int,
+Kimball,Ralph Kimball,https://www.kimballgroup.com/,
+MIP,Market Information Package,https://www.austrade.gov.au/,
+MS,Microsoft,https://www.microsoft.com/en-au,
+NASA,National Aeronautics and Space Administration,https://www.nasa.gov/,
+NATO,North Atlantic Treaty Organization,https://www.nato.int/,
+NCVER,National Centre for Vocational Education Research,https://www.ncver.edu.au/,
+NYSSCPA,New York State Society of CPAs,https://www.nysscpa.org/,
+OASIS,Organization for the Advancement of Structured Information Standards,https://www.oasis-open.org/,
+OECD,Organisation for Economic Co-operation and Development,https://www.oecd.org/,
+OGC,Open Geospatial Consortium,https://www.opengeospatial.org/,
+OMG,Object Management Group,https://www.omg.org/,
+Oracle,Oracle Corporation,https://www.oracle.com,
+PMC,Prime Minister and Cabinet,https://www.pmc.gov.au/,
+PTE,Pearson Test of English (Academic),https://pearsonpte.com/,
+RBA,Reserve Bank of Australia,https://www.rba.gov.au/,
+SA,Standards Australia,https://www.standards.org.au/,
+School,School,https://www.education.gov.au/,
+SEI,Software Engineering Institute,https://www.sei.cmu.edu/,
+Statistics,Statistical Society of Australia,https://www.statsoc.org.au/,
+UML,Unified Modeling Language,http://uml.org/,
+VET,Vocational Education and Training,https://www.education.gov.au/,
+W3C,World Wide Web Consortium,https://www.w3.org/,
+Wiki,Wikipedia,https://en.wikipedia.org/wiki/Main_Page,
