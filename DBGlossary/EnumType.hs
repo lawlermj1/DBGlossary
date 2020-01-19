@@ -54,7 +54,8 @@ data MultiWordType = NotMW | InstanceMW | BaseMW deriving (  Eq, Ord, Typeable, 
 --    NBN | NEAD | NSO are level 2, and are department specific  
 --    BMK | PNI | SLF | WWM | LNI are level 3, and tend to be system specific 
 --    ZDomain is the bottom type or _|_ Domain - where junk words, mistakes, misspellings are kept 
-data DomainType =  AllDomains | CRM | Engineering | Finance | Geography | HR | IT | NBN | Telco | TimeStd | Organisation | NEAD | NSO | BMK | PNI | SLF | CIS | CAMS | WWM | ZDomain deriving (  Eq, Ord, Typeable, Show, Read, Data ) 
+data DomainType =  AllDomains  | Aviation | ComputerScience | DataWarehouse | Education | Engineering  | Finance  | Geography  | Government | HumanResource | InformationTechnology | Legal | Marketing | Mathematics | Military | Organisation  | Project | Risk | Sales | Science | Standard | StandardEnglish | Telecommunication | Time | Unknown | ZDomain  deriving (  Eq, Ord, Typeable, Show, Read, Data ) 
+ 
 
 --    AuthorityType represents the 'Who' of phrases. That is, which person or Org has defined this phrase. 
 --    Standards bodies AuthorityType include ISO, ITU, OMG, ANSI, StdAust, OASIS, etc 
@@ -63,7 +64,7 @@ data DomainType =  AllDomains | CRM | Engineering | Finance | Geography | HR | I
 --    Book AuthorityType include LawDict, etc. 
 --    Government AuthorityType include ABS, ATO, USGovt, EC, etc. 
 --    Wiki is the bottom type or _|_ AuthorityType - which is the Womb of Ignorance, Kraziness and Incomprehension 
-data AuthorityType = Wiki | ABS | ACCC | ALII | ANSI | ATO | BIPM | BPMI | BSI | CJDate | CS | EC | GAT | HK | IASB | IBM | IETF | ISO | ITU | Kimball | LawDict | MktgMgt | MS | NESSI | NYSSCPA | OASIS | OGC | OMG | Oracle | Primavera | StdAust | SCC | SEI | UML | USGovt | W3C deriving (  Eq, Ord, Typeable, Show, Read, Data ) 
+data AuthorityType = ABS | ACARA | ACCC | ACECQA | ACM | AEDC | AES | AG | AGD | ALII | ANSI | ASGS | ASIC | ATO | Austrade | BIPM | BSI | CC | CJDate | COAG | DA | DD | DE | DESSFB | DF | DFAT | DH | DHA | DHS | DIAC | DIBP | DIMA | DPMC | DSS | DT | DVA | EC | ESA | FGUSA | FRL | FS | GAT | GUK | HE | HEIMS | IASB | IBM | IEA | IETF | ISO | ITECA | ITU | Kimball | MIP | MS | NASA | NATO | NCVER | NYSSCPA | OASIS | OECD | OGC | OMG | Oracle | PMC | PTE | RBA | SA | School | SEI | Statistics | UML | VET | W3C | Wiki deriving (  Eq, Ord, Typeable, Show, Read, Data )  
 
 
 
