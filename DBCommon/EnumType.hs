@@ -24,7 +24,7 @@ import Data.Data
 
 --------------------------------------------------------------------------------
 --    File types  
-data FileType = TSV | CSV | DDL | DML | DCL | HTM | SQL | TXT | XMLOut | TDS deriving (  Eq, Ord, Typeable, Show, Read, Data ) 
+data FileType = TSV | CSV | DDL | DML | DCL | HTM | SQL | TXT | XMLOut | TDS | XMI deriving (  Eq, Ord, Typeable, Show, Read, Data ) 
 
 --    what type of source created the data 
 --    this can often be used as part of a file name 
