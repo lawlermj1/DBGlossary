@@ -185,8 +185,12 @@ main = do
     let p2nLU = invertName2Phrase name2PhraseList   
 --    handles 3,500 phrases with 2,800 names in 3 minutes 
 --    Acronyms only ( filter ( ( == Acronym ).phrasePhraseType ) 
+--    Letter (( == Letter ).phrasePhraseType || ( == Acronym ).phrasePhraseType ) )
 --    parses 1,600 Acronyms used in 200,000 names in ?? minutes 
-    let phrase2NameListOut = map phrase2Name2Out ( filter ( ( /= 0 ).phrase2NameNameCount ) ( map ( ( addNames2Phrase2Name p2nLU ).( addSnippets2Phrase2Name pw2sLU ).phrase2Phrase2Name ) ( filter ( ( == Acronym ).phrasePhraseType ) phraseList ) ) )  
+--   Acronyms only time = 15 minutes 
+--    let phrase2NameListOut = map phrase2Name2Out ( filter ( ( /= 0 ).phrase2NameNameCount ) ( map ( ( addNames2Phrase2Name p2nLU ).( addSnippets2Phrase2Name pw2sLU ).phrase2Phrase2Name ) ( filter (\p -> (phrasePhraseType p) == Letter || (phrasePhraseType p) == Acronym ) phraseList ) ) )  
+--   All words Time = 
+    let phrase2NameListOut = map phrase2Name2Out ( filter ( ( /= 0 ).phrase2NameNameCount ) ( map ( ( addNames2Phrase2Name p2nLU ).( addSnippets2Phrase2Name pw2sLU ).phrase2Phrase2Name ) phraseList ) ) 
 
 -- OUTPUT ------------------------------------------------------------------
 
@@ -197,7 +201,7 @@ main = do
     let toPrintListX = [listToPrint TSV name2PhraseListOut] ++ [listToPrint TSV phrase2NameListOut]
 
 --    print multiple files toPrintListX 
---    mapM_ ( \x -> printFile ( toPrintFileName x ) ( toPrintContents x ) ) ( filter ( /= toPrintDefault ) toPrintList5 ) 
+--    mapM_ ( \x -> printFile ( toPrintFileName x ) ( toPrintContents x ) ) ( filter ( /= toPrintDefault ) toPrintList4 ) 
     mapM_ ( \x -> printFile ( toPrintFileName x ) ( toPrintContents x ) ) toPrintListX 
 
    
