@@ -35,7 +35,7 @@ import Data.Data
 --    Spelling is a common misspelling. US spelling is not considered an error. 
 --    Term is used for multiple word phrases that are almost a single phrase. e.g. Macaddress 
 --    ZRubbish is the bottom type or _|_ PhraseType. Misspellings and non standard contractions are a common issue in database column names e.g. Wtype 
-data PhraseType = AllPhrase | Acronym | Contraction | Letter | MultipleWords | Number | PastTense | Plural | ProperNoun | Spelling | Term | ZRubbish deriving (  Eq, Ord, Typeable, Show, Read, Data ) 
+data PhraseType = AllPhrase | Acronym | Contraction | Letter | MultipleWords | Number | PastTense | Plural | ProperNoun | Punctuation | Spelling | StemError | Term | ZRubbish deriving (  Eq, Ord, Typeable, Show, Read, Data ) 
 
 --    defines types of MultiWords 
 --    NotMW is a phrase that is not a MultiWord.  
@@ -54,8 +54,9 @@ data MultiWordType = NotMW | InstanceMW | BaseMW deriving (  Eq, Ord, Typeable, 
 --    NBN | NEAD | NSO are level 2, and are department specific  
 --    BMK | PNI | SLF | WWM | LNI are level 3, and tend to be system specific 
 --    ZDomain is the bottom type or _|_ Domain - where junk words, mistakes, misspellings are kept 
-data DomainType =  AllDomains  | Aviation | ComputerScience | DataWarehouse | Education | Engineering  | Finance  | Geography  | Government | HumanResource | InformationTechnology | Legal | Marketing | Mathematics | Military | Organisation  | Project | Risk | Sales | Science | Standard | StandardEnglish | Telecommunication | Time | Unknown | ZDomain  deriving (  Eq, Ord, Typeable, Show, Read, Data ) 
- 
+data DomainType =  AllDomains  | Aviation | ComputerScience | DataWarehouse | Education | Engineering  | Finance  | Geography  | Government | Health | HumanResource | InformationTechnology | Legal | Marketing | Mathematics | Military | Organisation  | Project | Risk | Sales | Science | Standard | StandardEnglish | Statistics | Telecommunication | Time | Unknown | ZDomain deriving (  Eq, Ord, Typeable, Show, Read, Data ) 
+
+
 
 --    AuthorityType represents the 'Who' of phrases. That is, which person or Org has defined this phrase. 
 --    Standards bodies AuthorityType include ISO, ITU, OMG, ANSI, StdAust, OASIS, etc 
@@ -64,7 +65,7 @@ data DomainType =  AllDomains  | Aviation | ComputerScience | DataWarehouse | Ed
 --    Book AuthorityType include LawDict, etc. 
 --    Government AuthorityType include ABS, ATO, USGovt, EC, etc. 
 --    Wiki is the bottom type or _|_ AuthorityType - which is the Womb of Ignorance, Kraziness and Incomprehension 
-data AuthorityType = ABS | ACARA | ACCC | ACECQA | ACM | AEDC | AES | AG | AGD | ALII | ANSI | ASGS | ASIC | ATO | Austrade | BIPM | BSI | CC | CJDate | COAG | DA | DD | DE | DESSFB | DF | DFAT | DH | DHA | DHS | DIAC | DIBP | DIMA | DPMC | DSS | DT | DVA | EC | ESA | FGUSA | FRL | FS | GAT | GUK | HE | HEIMS | IASB | IBM | IEA | IETF | ISO | ITECA | ITU | Kimball | MIP | MS | NASA | NATO | NCVER | NYSSCPA | OASIS | OECD | OGC | OMG | Oracle | PMC | PTE | RBA | SA | School | SEI | Statistics | UML | VET | W3C | Wiki deriving (  Eq, Ord, Typeable, Show, Read, Data )  
+data AuthorityType = ABS | ACARA | ACCC | ACECQA | ACM | AEDC | AES | AG | AGD | ALII | ANSI | APICS | ASGS | ASIC | ATO | Austrade | BIPM | BSI | CC | CJDate | COAG | DA | DD | DE | DESSFB | DF | DFAT | DH | DHA | DHS | DIAC | DIBP | DIMA | DPMC | DSS | DT | DVA | EC | ESA | FGUSA | FRL | FS | GAT | GUK | HE | HEIMS | IASB | IBM | IEA | IETF | ISO | ITECA | ITU | Kimball | MIP | MS | NASA | NATO | NCVER | NYSSCPA | OASIS | OECD | OGC | OMG | Oracle | PMC | PTE | RBA | SA | School | SEI | UML | VET | W3C | Wiki deriving (  Eq, Ord, Typeable, Show, Read, Data )  
 
 
 
